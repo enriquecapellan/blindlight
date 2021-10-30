@@ -20,6 +20,8 @@ venv
 docs.zip
 archive.zip
 
+.DS_Store
+
 # vim temporary files
 *~
 .*.sw?
