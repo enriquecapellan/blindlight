@@ -15,8 +15,8 @@ def read_root():
 
 @app.post("/image_labels")
 async def image_labels(model: Item):
-    message_bytes = base64.b64decode(model.image+ "==")
-
+    image = model.image.split(",")[1]
+    message_bytes = base64.b64decode(image)
 
     labels = extract_labels(message_bytes)
     return labels
