@@ -14,5 +14,5 @@ async def image_labels(image: str = ''):
     base64_bytes = base64.b64encode(message_bytes)
     finalImage = base64_bytes.decode('ascii')
 
-    labels = extract_labels(finalImage)
+    labels = extract_labels(base64_bytes)
     return labels
