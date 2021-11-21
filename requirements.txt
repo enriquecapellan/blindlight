@@ -57,3 +57,4 @@ watchgod==0.7
 websockets==10.0
 pydantic[email]
 motor==2.2.0
+gunicorn
