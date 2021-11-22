@@ -1,12 +1,28 @@
-import motor.motor_asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from bson.objectid import ObjectId
 
 MONGO_DETAILS = "mongodb+srv://enriquecapellan:Capellan2907@cluster0.p2hqd.mongodb.net/blindlight"
 
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
-database = client.blindlight
+client: AsyncIOMotorClient = None
 
-users_collection = database.get_collection("users")
+
+async def get_db_client() -> AsyncIOMotorClient:
+    return client
+
+
+async def connect_db():
+    global client
+    client = AsyncIOMotorClient(MONGO_DETAILS)
+
+
+async def close_db():
+    client.close()
+
+
+def get_collection(collection: str):
+    database = client.blindlight
+    collection = database.get_collection(collection)
+    return collection
 
 # helpers
 
@@ -23,30 +39,32 @@ def user_helper(user) -> dict:
 # user
 async def get_users():
     users = []
-    async for user in users_collection.find():
+    async for user in get_collection('users').find():
         users.append(user_helper(user))
     return users
 
 
 async def get_user(id: str) -> dict:
-    user = await users_collection.find_one({"_id": ObjectId(id)})
+    user = await get_collection('users').find_one({"_id": ObjectId(id)})
     if(user):
         return user_helper(user)
 
 
 async def get_user_by_username(username: str) -> dict:
-    user = await users_collection.find_one({"username": username})
+    user = await get_collection('users').find_one({"username": username})
     if(user):
         return user_helper(user)
 
 
 async def create_user(data: dict) -> dict:
+    users_collection = get_collection('users')
     user = await users_collection.insert_one(data)
     new_user = await users_collection.find_one({"_id": user.inserted_id})
     return user_helper(new_user)
 
 
 async def update_user(id: str, data: dict) -> dict:
+    users_collection = get_collection('users')
     if len(data) < 1:
         return False
     user = await users_collection.find_one({"_id": ObjectId(id)})
@@ -58,6 +76,7 @@ async def update_user(id: str, data: dict) -> dict:
 
 
 async def delete_user(id: str):
+    users_collection = get_collection('users')
     user = await users_collection.find_one({"_id": ObjectId(id)})
     if user:
         await users_collection.delete_one({"_id": ObjectId(id)})

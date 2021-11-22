@@ -4,8 +4,12 @@ import base64
 from pydantic import BaseModel
 from utils.ai import describe_image, extract_labels, detect_text
 from routers import users
+from db import connect_db, close_db
 
-app = FastAPI()
+app = FastAPI(title='Blind Light')
+
+app.add_event_handler("startup", connect_db)
+app.add_event_handler("shutdown", close_db)
 
 app.include_router(users.router, tags=["users"], prefix="/users")
 
