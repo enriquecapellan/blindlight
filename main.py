@@ -25,10 +25,14 @@ def read_root():
 
 @app.post("/image_labels")
 async def image_labels(model: Item):
+    print('step 1')
     image = model.image.split(",")[1]
+    print('step 2')
     image_bytes = base64.b64decode(image)
+    print('step 3')
 
     labels = extract_labels(image_bytes)
+    print('step 4')
     return labels
 
 
