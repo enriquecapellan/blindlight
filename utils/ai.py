@@ -28,8 +28,9 @@ async def describe_image(image: bytes):
     response = api.image_request(image, 'image.jpg', {
         'image_request[locale]': 'en-US',
     })
+
     status = api.wait(response['token'], timeout=60)
     if status['status'] != cloudsight.STATUS_NOT_COMPLETED:
-        return response
+        return status
     else:
         return None
