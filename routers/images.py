@@ -32,7 +32,7 @@ async def extract_text(model: Item):
 async def get_description(model: Item):
     image = model.image.split(",")[1]
     image_bytes = base64.b64decode(image)
-    description = describe_image(image_bytes)
+    description = await describe_image(image_bytes)
     return description
 
 
