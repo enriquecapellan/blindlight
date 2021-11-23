@@ -9,11 +9,8 @@ client = boto3.client('rekognition')
 
 
 def extract_labels(image: bytes):
-    print('step 3.1')
     response = client.detect_labels(Image={'Bytes': image}, MaxLabels=10)
-    print('step 3.2')
     labels = response["Labels"]
-    print('step 3.3')
     return list(map((lambda x: translate(x["Name"])), labels))
 
 
