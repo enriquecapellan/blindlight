@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(users.router, tags=["users"], prefix="/users")
-app.include_router(images.router, tags=["images", "ai"], prefix="/image")
+app.include_router(images.router, tags=["images"], prefix="/image")
 
 
 @app.get("/")

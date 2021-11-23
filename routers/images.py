@@ -11,7 +11,7 @@ class Item(BaseModel):
     image: str
 
 
-@router.get('/labels')
+@router.post('/labels')
 async def get_labels(model: Item):
     image = model.image.split(",")[1]
     image_bytes = base64.b64decode(image)
