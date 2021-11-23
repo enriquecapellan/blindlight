@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 
-from routers import users, ai
+from routers import users, images
 from db import connect_db, close_db
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,7 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(users.router, tags=["users"], prefix="/users")
-app.include_router(ai.router, tags=["images", "ai"], prefix="/image")
+app.include_router(images.router, tags=["images", "ai"], prefix="/image")
 
 
 @app.get("/")
