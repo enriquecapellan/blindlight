@@ -9,11 +9,8 @@ client = boto3.client('rekognition')
 
 
 def extract_labels(image: bytes):
-    print('step 3.1')
     response = client.detect_labels(Image={'Bytes': image}, MaxLabels=10)
-    print('step 3.2')
     labels = response["Labels"]
-    print('step 3.3')
     return list(map((lambda x: translate(x["Name"])), labels))
 
 
@@ -27,12 +24,13 @@ def translate(text: str):
     return translated
 
 
-def describe_image(image: bytes):
+async def describe_image(image: bytes):
     response = api.image_request(image, 'image.jpg', {
-        'image_request[locale]': 'es',
+        'image_request[locale]': 'en-US',
     })
-    status = api.wait(response['token'], timeout=30)
+
+    status = api.wait(response['token'], timeout=60)
     if status['status'] != cloudsight.STATUS_NOT_COMPLETED:
-        return response
+        return translate(status['name'])
     else:
         return None
