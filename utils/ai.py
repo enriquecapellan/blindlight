@@ -31,6 +31,6 @@ async def describe_image(image: bytes):
 
     status = api.wait(response['token'], timeout=60)
     if status['status'] != cloudsight.STATUS_NOT_COMPLETED:
-        return status
+        return translate(status['name'])
     else:
         return None
