@@ -59,3 +59,4 @@ pydantic[email]
 motor==2.2.0
 gunicorn
 googlemaps
+pandas
