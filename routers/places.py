@@ -1,6 +1,7 @@
 import googlemaps
 import pandas as pd
 from fastapi import APIRouter, HTTPException, status, Body, Depends
+from utils.ai import translate
 from utils.maps import miles_to_meters
 
 
@@ -18,4 +19,11 @@ async def map_nearbyplaces(lat, lon):
     response = client.places_nearby(
         location=location, keyword='', radius=distance)
     places.extend(response.get('results'))
-    return places
+    return list(map((lambda x: {
+        "name": x.get('name', ''),
+        "id": x.get("place_id", ''),
+        "types": list(map(lambda x: translate(x), x.get("types", []))),
+        "location": x.get("vicinity", ''),
+        "rating": x.get("rating", ''),
+        "opening_hours": x.get("opening_hours", ''),
+    }), places))
