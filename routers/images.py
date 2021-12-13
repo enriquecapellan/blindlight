@@ -48,7 +48,9 @@ async def analyze(model: AnalyzeModel):
     image = model.image.split(",")[1]
     image_bytes = base64.b64decode(image)
 
-    text, labels, description = ''
+    text =''
+    labels = ''
+    description = ''
     if (model.extract_labels):
         labels = extract_labels(image_bytes)
     if (model.extract_text):
