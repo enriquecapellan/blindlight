@@ -11,6 +11,13 @@ class Item(BaseModel):
     image: str
 
 
+class AnalyzeModel(BaseModel):
+    image: str
+    extract_labels: bool
+    extract_text: bool
+    generate_description: bool
+
+
 @router.post('/labels')
 async def get_labels(model: Item):
     image = model.image.split(",")[1]
@@ -34,6 +41,22 @@ async def get_description(model: Item):
     image_bytes = base64.b64decode(image)
     description = await describe_image(image_bytes)
     return description
+
+
+@router.post("/analyze")
+async def analyze(model: AnalyzeModel):
+    image = model.image.split(",")[1]
+    image_bytes = base64.b64decode(image)
+
+    text, labels, description = ''
+    if (model.extract_labels):
+        labels = extract_labels(image_bytes)
+    if (model.extract_text):
+        text = detect_text(image_bytes)
+    if (model.generate_description):
+        description = await describe_image(image_bytes)
+    
+    return {'description': description, 'labels': labels, 'text': text}
 
 
 @router.post("/labels_bytes")
