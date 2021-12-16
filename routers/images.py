@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException, status, File
+from fastapi import APIRouter, File
 from pydantic import BaseModel
 import base64
 
-from utils.ai import describe_image, extract_labels, detect_text
+from utils.ai import describe_image, extract_labels, detect_text, extract_labels_complete
 
 router = APIRouter()
 
@@ -63,5 +63,5 @@ async def analyze(model: AnalyzeModel):
 
 @router.post("/labels_bytes")
 async def image_labels(image: bytes = File(...)):
-    labels = extract_labels(image)
+    labels = extract_labels_complete(image)
     return labels

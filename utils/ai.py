@@ -14,6 +14,11 @@ def extract_labels(image: bytes):
     return list(map((lambda x: translate(x["Name"])), labels))
 
 
+def extract_labels_complete(image: bytes):
+    response = client.get_content_moderation(Image={'Bytes': image})
+    return response
+
+
 def detect_text(image: bytes):
     response = client.detect_text(Image={'Bytes': image})
     return response

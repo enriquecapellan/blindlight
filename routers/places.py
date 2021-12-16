@@ -14,11 +14,12 @@ router = APIRouter()
 @router.get('/nearbyplaces')
 async def map_nearbyplaces(lat, lon):
     location = (lat, lon)
-    distance = miles_to_meters(15)
+    distance = miles_to_meters(3)
     places = []
     response = client.places_nearby(
         location=location, keyword='', radius=distance)
     places.extend(response.get('results'))
+    print(places)
     return list(map((lambda x: {
         "name": x.get('name', ''),
         "id": x.get("place_id", ''),
@@ -26,4 +27,5 @@ async def map_nearbyplaces(lat, lon):
         "location": x.get("vicinity", ''),
         "rating": x.get("rating", ''),
         "opening_hours": x.get("opening_hours", ''),
+        "geometry": x.get("geometry", None)
     }), places))
